@@ -10,9 +10,6 @@ build/
 *.ipr
 out/
 
-# Compose Resources
-composeResources/
-
 # Node modules
 node_modules/
 
