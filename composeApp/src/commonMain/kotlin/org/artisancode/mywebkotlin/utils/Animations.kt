@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 enum class RevealDirection {
     TOP, BOTTOM, LEFT, RIGHT
@@ -29,7 +30,7 @@ fun ScrollReveal(
 
     LaunchedEffect(trigger) {
         if (trigger && !isVisible) {
-            delay(delayMillis)
+            delay(delayMillis.milliseconds)
             isVisible = true
         }
     }

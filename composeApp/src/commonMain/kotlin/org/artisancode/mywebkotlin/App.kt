@@ -25,6 +25,7 @@ import org.artisancode.mywebkotlin.components.*
 import org.artisancode.mywebkotlin.ui.theme.AppTheme
 import org.artisancode.mywebkotlin.utils.ScreenSize
 import org.artisancode.mywebkotlin.utils.rememberScreenSize
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun App() {
@@ -134,7 +135,7 @@ fun App() {
                     onNavigate = { section ->
                         coroutineScope.launch {
                             visibleSections[section] = true
-                            delay(50)
+                            delay(50.milliseconds)
 
                             val targetPosition = sectionPositions[section] ?: 0
                             scrollState.animateScrollTo(

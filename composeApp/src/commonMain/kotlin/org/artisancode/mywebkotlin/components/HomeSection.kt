@@ -31,6 +31,7 @@ import org.artisancode.mywebkotlin.utils.ScreenSize
 import org.artisancode.mywebkotlin.utils.ScrollReveal
 import org.artisancode.mywebkotlin.utils.rememberScreenSize
 import org.jetbrains.compose.resources.painterResource
+import kotlin.time.Duration.Companion.milliseconds
 
 // Colores para tecnologías
 private object TechColors {
@@ -68,7 +69,7 @@ fun HomeSection(
     )
 
     LaunchedEffect(Unit) {
-        delay(200)
+        delay(200.milliseconds)
         isVisible = true
     }
 

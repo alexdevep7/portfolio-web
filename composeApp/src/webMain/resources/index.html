@@ -11,9 +11,19 @@
     <!-- Google Fonts - Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;909&display=swap" rel="stylesheet">
 
     <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        html {
+            font-size: 62.5%; /* 1rem = 10px base */
+            overflow-x: hidden;
+        }
+
         html, body {
             margin: 0;
             padding: 0;
@@ -21,12 +31,11 @@
             height: 100%;
             overflow-x: hidden;
             font-family: 'Poppins', sans-serif;
-            /* Deshabilitar pull-to-refresh */
             overscroll-behavior-y: contain;
             -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
         }
 
-        /* Prevenir bounce/overscroll en iOS */
         body {
             position: fixed;
             overflow: hidden;
@@ -41,6 +50,19 @@
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
             overscroll-behavior-y: contain;
+        }
+
+        /* RESPONSIVE FONT SIZES - IGUAL QUE EL ORIGINAL */
+        @media (max-width: 1200px) {
+            html {
+                font-size: 55%; /* 10% más pequeño */
+            }
+        }
+
+        @media (max-width: 450px) {
+            html {
+                font-size: 50%; /* 20% más pequeño */
+            }
         }
     </style>
 </head>
