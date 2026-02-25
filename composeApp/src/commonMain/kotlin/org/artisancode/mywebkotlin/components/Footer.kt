@@ -137,7 +137,7 @@ private fun FooterSocial() {
             tooltip = "Sígueme en Instagram",
             onClick = {
                 kotlinx.browser.window.open(
-                    "https://www.instagram.com/alexdevep/",
+                    "https://www.instagram.com/artisancode7/",
                     "_blank"
                 )
             }

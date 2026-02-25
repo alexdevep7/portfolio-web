@@ -157,25 +157,38 @@ private fun AboutContent(screenSize: ScreenSize) {
             Alignment.Start
     ) {
         // Título
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(
-                text = "Sobre",
-                style = when (screenSize) {
-                    ScreenSize.MOBILE -> MaterialTheme.typography.displaySmall
-                    else -> MaterialTheme.typography.displayMedium
-                },
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Text(
-                text = "Mí",
-                style = when (screenSize) {
-                    ScreenSize.MOBILE -> MaterialTheme.typography.displaySmall
-                    else -> MaterialTheme.typography.displayMedium
-                },
-                color = MaterialTheme.colorScheme.primary
-            )
+        // Título
+        if (screenSize == ScreenSize.MOBILE) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = "Sobre",
+                    style = MaterialTheme.typography.displaySmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = "Mí",
+                    style = MaterialTheme.typography.displaySmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        } else {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = "Sobre",
+                    style = MaterialTheme.typography.displayMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = "Mí",
+                    style = MaterialTheme.typography.displayMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
         }
 
         // Subtítulo

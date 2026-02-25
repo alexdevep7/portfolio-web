@@ -52,6 +52,7 @@ fun ProjectsSection(
         verticalArrangement = Arrangement.spacedBy(40.dp)
     ) {
         // Título
+        // Título
         ScrollReveal(
             trigger = shouldAnimate,
             direction = RevealDirection.TOP,
@@ -59,25 +60,38 @@ fun ProjectsSection(
             duration = 2000,
             delayMillis = 200
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    text = "Últimos",
-                    style = when (screenSize) {
-                        ScreenSize.MOBILE -> MaterialTheme.typography.displaySmall
-                        else -> MaterialTheme.typography.displayMedium
-                    },
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = "Proyectos",
-                    style = when (screenSize) {
-                        ScreenSize.MOBILE -> MaterialTheme.typography.displaySmall
-                        else -> MaterialTheme.typography.displayMedium
-                    },
-                    color = MaterialTheme.colorScheme.primary
-                )
+            // ← AQUÍ VA EL if/else
+            if (screenSize == ScreenSize.MOBILE) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = "Últimos",
+                        style = MaterialTheme.typography.displaySmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "Proyectos",
+                        style = MaterialTheme.typography.displaySmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            } else {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = "Últimos",
+                        style = MaterialTheme.typography.displayMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "Proyectos",
+                        style = MaterialTheme.typography.displayMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         }
 

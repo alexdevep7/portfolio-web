@@ -131,7 +131,7 @@ fun HomeSection(
                             TypedText(
                                 texts = listOf(
                                     "Android Developer",
-                                    "Kotlin Multiplatform Developer"
+                                    "KMP Developer"
                                 ),
                                 style = MaterialTheme.typography.headlineMedium,
                                 delayBetween = 2000L
@@ -156,7 +156,7 @@ fun HomeSection(
                                 icon = Icons.Default.Camera,
                                 contentDescription = "Instagram",
                                 tooltip = "Mi Instagram",
-                                onClick = { openUrl("https://www.instagram.com/alexdevep/") }
+                                onClick = { openUrl("https://www.instagram.com/artisancode7/") }
                             )
                             SocialMediaButton(
                                 icon = Icons.Default.Business,

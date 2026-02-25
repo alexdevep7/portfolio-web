@@ -61,25 +61,39 @@ fun SkillsSection(
             duration = 2000,
             delayMillis = 200
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    text = "Habilidades y",
-                    style = when (screenSize) {
-                        ScreenSize.MOBILE -> MaterialTheme.typography.displaySmall
-                        else -> MaterialTheme.typography.displayMedium
-                    },
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = "Experiencia",
-                    style = when (screenSize) {
-                        ScreenSize.MOBILE -> MaterialTheme.typography.displaySmall
-                        else -> MaterialTheme.typography.displayMedium
-                    },
-                    color = MaterialTheme.colorScheme.primary
-                )
+            if (screenSize == ScreenSize.MOBILE) {
+                // MOBILE: Título en 2 líneas centrado
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = "Habilidades y",
+                        style = MaterialTheme.typography.displaySmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "Experiencia",
+                        style = MaterialTheme.typography.displaySmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            } else {
+                // TABLET/DESKTOP: Título en 1 línea
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = "Habilidades y",
+                        style = MaterialTheme.typography.displayMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "Experiencia",
+                        style = MaterialTheme.typography.displayMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         }
 
