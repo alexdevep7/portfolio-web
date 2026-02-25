@@ -131,7 +131,7 @@ fun HomeSection(
                             TypedText(
                                 texts = listOf(
                                     "Android Developer",
-                                    "KMP Developer"
+                                    "Kotlin Multiplatform Developer"
                                 ),
                                 style = MaterialTheme.typography.headlineMedium,
                                 delayBetween = 2000L
@@ -313,7 +313,7 @@ fun HomeSection(
                         TypedText(
                             texts = listOf(
                                 "Android Developer",
-                                "Kotlin Multiplatform Developer"
+                                "KMP Developer"
                             ),
                             style = MaterialTheme.typography.headlineSmall,
                             delayBetween = 2000L
