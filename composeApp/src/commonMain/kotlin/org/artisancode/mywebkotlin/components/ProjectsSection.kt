@@ -1,5 +1,8 @@
 package org.artisancode.mywebkotlin.components
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,10 +18,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.artisancode.mywebkotlin.models.Project
 import org.artisancode.mywebkotlin.models.ProjectsData
@@ -144,6 +150,14 @@ private fun ProjectCard(
     ) {
         var isHovered by remember { mutableStateOf(false) }
 
+        val overlayOffsetY by animateFloatAsState(
+            targetValue = if (isHovered) 0f else 1f,  // 0f = visible, 1f = oculto abajo
+            animationSpec = tween(
+                durationMillis = 400,
+                easing = FastOutSlowInEasing
+            )
+        )
+
         Card(
             modifier = Modifier
                 .pointerInput(Unit) {
@@ -164,56 +178,55 @@ private fun ProjectCard(
                 defaultElevation = if (isHovered) 16.dp else 4.dp
             )
         ) {
-            Column(
+            Box(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                // Imagen con efecto de escala
+                // Imagen
+                Image(
+                    painter = painterResource(project.imageResource),
+                    contentDescription = project.title,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(320.dp)
+                        .scale(if (isHovered) 1.1f else 1.0f),
+                    contentScale = ContentScale.Crop
+                )
+
+                // Overlay que sube desde abajo
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp)
+                        .height(320.dp)
+                        .graphicsLayer {
+                            translationY = size.height * overlayOffsetY
+                        }
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.Black.copy(alpha = 0.2f),
+                                    Color(0xFF9290C3).copy(alpha = 0.92f)  // tu --main-color
+                                )
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Image(
-                        painter = painterResource(project.imageResource),
-                        contentDescription = project.title,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .scale(if (isHovered) 1.1f else 1.0f),
-                        contentScale = ContentScale.Crop
-                    )
-
-                    // Overlay oscuro a hover
-                    if (isHovered) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(Color.Black.copy(alpha = 0.3f))
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.padding(24.dp)
+                    ) {
+                        Text(
+                            text = project.title,
+                            style = MaterialTheme.typography.headlineSmall,
+                            color = Color.White
+                        )
+                        Text(
+                            text = project.description,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.White.copy(alpha = 0.9f),
+                            textAlign = TextAlign.Center
                         )
                     }
-                }
-
-                // Contenido
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Text(
-                        text = project.title,
-                        style = MaterialTheme.typography.headlineSmall,
-                        color = if (isHovered)
-                            MaterialTheme.colorScheme.primary
-                        else
-                            MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Text(
-                        text = project.description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
-                        modifier = Modifier.height(100.dp)
-                    )
                 }
             }
         }

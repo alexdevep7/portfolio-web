@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import org.artisancode.mywebkotlin.components.*
 import org.artisancode.mywebkotlin.ui.theme.AppTheme
 import org.artisancode.mywebkotlin.utils.ScreenSize
+import org.artisancode.mywebkotlin.utils.SectionWrapper
 import org.artisancode.mywebkotlin.utils.rememberScreenSize
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -34,92 +35,27 @@ fun App() {
         val screenSize = rememberScreenSize()
         val coroutineScope = rememberCoroutineScope()
 
-        // Detectar qué sección está visible
         val visibleSections = remember { mutableStateMapOf<String, Boolean>() }
 
-        // Posiciones aproximadas de cada sección (ajusta según tu layout)
-        val sectionPositions = remember(screenSize) {
-            when (screenSize) {
-                ScreenSize.MOBILE -> mapOf(
-                    "home" to 0,
-                    "about" to 1944,
-                    "skills" to 3878,
-                    "projects" to 6428
-                )
-                ScreenSize.TABLET -> mapOf(
-                    "home" to 0,
-                    "about" to 1944,
-                    "skills" to 3878,
-                    "projects" to 6428
-                )
-                ScreenSize.DESKTOP -> mapOf(
-                    "home" to 0,
-                    "about" to 1511,
-                    "skills" to 2825,
-                    "projects" to 4221
-                )
+        // Posiciones reales medidas dinámicamente
+        val sectionOffsets = remember { mutableStateMapOf<String, Int>() }
+
+        val currentSection by remember {
+            derivedStateOf {
+                val scroll = scrollState.value
+                val sorted = sectionOffsets.entries.sortedBy { it.value }
+                sorted.lastOrNull { scroll >= (it.value - 150) }?.key ?: "home"
             }
         }
 
         LaunchedEffect(scrollState.value) {
-            console.log("Scroll position: ${scrollState.value}")
-            val scrollPosition = scrollState.value
+            val scroll = scrollState.value
 
-            // Activar home siempre al inicio
-            if (!visibleSections.contains("home")) {
-                visibleSections["home"] = true
-            }
+            if (!visibleSections.contains("home")) visibleSections["home"] = true
 
-            // Activar about
-            val aboutTrigger = when (screenSize) {
-                ScreenSize.MOBILE, ScreenSize.TABLET -> 1744
-                ScreenSize.DESKTOP -> 1311
-            }
-            if (scrollPosition > aboutTrigger && !visibleSections.contains("about")) {
-                visibleSections["about"] = true
-            }
-
-            // Activar skills
-            val skillsTrigger = when (screenSize) {
-                ScreenSize.MOBILE, ScreenSize.TABLET -> 3678
-                ScreenSize.DESKTOP -> 2625
-            }
-            if (scrollPosition > skillsTrigger && !visibleSections.contains("skills")) {
-                visibleSections["skills"] = true
-            }
-
-            // Activar projects
-            val projectsTrigger = when (screenSize) {
-                ScreenSize.MOBILE, ScreenSize.TABLET -> 6228
-                ScreenSize.DESKTOP -> 4021
-            }
-            if (scrollPosition > projectsTrigger && !visibleSections.contains("projects")) {
-                visibleSections["projects"] = true
-            }
-        }
-
-        // Detectar sección actual
-        val currentSection by remember {
-            derivedStateOf {
-                val scrollPosition = scrollState.value
-                val aboutThreshold = when (screenSize) {
-                    ScreenSize.MOBILE, ScreenSize.TABLET -> 1844
-                    ScreenSize.DESKTOP -> 1411
-                }
-                val skillsThreshold = when (screenSize) {
-                    ScreenSize.MOBILE, ScreenSize.TABLET -> 3778
-                    ScreenSize.DESKTOP -> 2725
-                }
-                val projectsThreshold = when (screenSize) {
-                    ScreenSize.MOBILE, ScreenSize.TABLET -> 6328
-                    ScreenSize.DESKTOP -> 4121
-                }
-
-                when {
-                    scrollPosition < aboutThreshold -> "home"
-                    scrollPosition < skillsThreshold -> "about"
-                    scrollPosition < projectsThreshold -> "skills"
-                    else -> "projects"
+            sectionOffsets.forEach { (section, offset) ->
+                if (scroll > offset - 200 && !visibleSections.contains(section)) {
+                    visibleSections[section] = true
                 }
             }
         }
@@ -136,8 +72,7 @@ fun App() {
                         coroutineScope.launch {
                             visibleSections[section] = true
                             delay(50.milliseconds)
-
-                            val targetPosition = sectionPositions[section] ?: 0
+                            val targetPosition = sectionOffsets[section] ?: 0
                             scrollState.animateScrollTo(
                                 value = targetPosition,
                                 animationSpec = spring(
@@ -156,22 +91,43 @@ fun App() {
                         .verticalScroll(scrollState)
                         .background(MaterialTheme.colorScheme.background)
                 ) {
-                    HomeSection(
-                        modifier = Modifier.fillMaxWidth(),
-                        shouldAnimate = visibleSections["home"] == true
-                    )
-                    AboutSection(
-                        modifier = Modifier.fillMaxWidth(),
-                        shouldAnimate = visibleSections["about"] == true
-                    )
-                    SkillsSection(
-                        modifier = Modifier.fillMaxWidth(),
-                        shouldAnimate = visibleSections["skills"] == true
-                    )
-                    ProjectsSection(
-                        modifier = Modifier.fillMaxWidth(),
-                        shouldAnimate = visibleSections["projects"] == true
-                    )
+                    // Wrapper que mide la posición Y real de cada sección
+                    SectionWrapper(
+                        onOffsetMeasured = { sectionOffsets["home"] = it }
+                    ) {
+                        HomeSection(
+                            modifier = Modifier.fillMaxWidth(),
+                            shouldAnimate = visibleSections["home"] == true
+                        )
+                    }
+
+                    SectionWrapper(
+                        onOffsetMeasured = { sectionOffsets["about"] = it }
+                    ) {
+                        AboutSection(
+                            modifier = Modifier.fillMaxWidth(),
+                            shouldAnimate = visibleSections["about"] == true
+                        )
+                    }
+
+                    SectionWrapper(
+                        onOffsetMeasured = { sectionOffsets["skills"] = it }
+                    ) {
+                        SkillsSection(
+                            modifier = Modifier.fillMaxWidth(),
+                            shouldAnimate = visibleSections["skills"] == true
+                        )
+                    }
+
+                    SectionWrapper(
+                        onOffsetMeasured = { sectionOffsets["projects"] = it }
+                    ) {
+                        ProjectsSection(
+                            modifier = Modifier.fillMaxWidth(),
+                            shouldAnimate = visibleSections["projects"] == true
+                        )
+                    }
+
                     Footer(modifier = Modifier.fillMaxWidth())
                 }
             }

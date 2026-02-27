@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun TypedText(
@@ -22,7 +23,7 @@ fun TypedText(
     LaunchedEffect(Unit) {
         while (true) {
             showCursor = !showCursor
-            delay(530)
+            delay(530.milliseconds)
         }
     }
 
@@ -33,15 +34,15 @@ fun TypedText(
             if (!isDeleting) {
                 if (currentText.length < fullText.length) {
                     currentText = fullText.substring(0, currentText.length + 1)
-                    delay(80L)  // Más rápido: de 100L a 80L
+                    delay(70L.milliseconds)  // Más rápido: de 100L a 80L
                 } else {
-                    delay(delayBetween)
+                    delay(delayBetween.milliseconds)
                     isDeleting = true
                 }
             } else {
                 if (currentText.isNotEmpty()) {
                     currentText = currentText.substring(0, currentText.length - 1)
-                    delay(40L)  // Más rápido: de 50L a 40L
+                    delay(35L.milliseconds)  // Más rápido: de 50L a 40L
                 } else {
                     isDeleting = false
                     currentTextIndex = (currentTextIndex + 1) % texts.size

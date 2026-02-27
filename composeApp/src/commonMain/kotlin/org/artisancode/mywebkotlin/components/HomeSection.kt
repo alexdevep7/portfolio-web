@@ -57,12 +57,12 @@ fun HomeSection(
 
     val infiniteTransition = rememberInfiniteTransition()
     val offsetY by infiniteTransition.animateFloat(
-        initialValue = -15f,
-        targetValue = 15f,
+        initialValue = -12f,
+        targetValue = 12f,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 3000,
-                easing = FastOutSlowInEasing
+                durationMillis = 4000,
+                easing = CubicBezierEasing(0.45f, 0.05f, 0.55f, 0.95f)
             ),
             repeatMode = RepeatMode.Reverse
         )
@@ -97,8 +97,8 @@ fun HomeSection(
                 ScrollReveal(
                     trigger = shouldAnimate,
                     direction = RevealDirection.TOP,
-                    duration = 2000,
-                    delayMillis = 200
+                    duration = 800,
+                    delayMillis = 100
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -441,13 +441,13 @@ private fun HomeImage(
     AnimatedVisibility(
         visible = isVisible,
         enter = slideInVertically(
-            initialOffsetY = { 80 },
+            initialOffsetY = { 60 },
             animationSpec = tween(
-                durationMillis = 2000,
+                durationMillis = 600,
                 easing = FastOutSlowInEasing
             )
         ) + fadeIn(
-            animationSpec = tween(durationMillis = 2000)
+            animationSpec = tween(durationMillis = 600)
         )
     ) {
         Box(
